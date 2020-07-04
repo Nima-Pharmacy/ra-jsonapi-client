@@ -14,7 +14,7 @@ export default () => {
 
       // When a 'token' is available set as Bearer token.
       if (token) {
-        newConfig.headers.Authorization = `Bearer ${token}`;
+        newConfig.headers.Authorization = `JWT ${token}`;
       }
 
       // When username and password are available use
@@ -33,10 +33,11 @@ export default () => {
     response => response,
     (error) => {
       const { status, data } = error.response;
+      const { detail } = data.errors[0];
 
       if (status < 200 || status >= 300) {
         return Promise.reject(
-          new HttpError(data, status),
+          new HttpError(detail, status),
         );
       }
 
